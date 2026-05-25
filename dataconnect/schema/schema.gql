@@ -1,0 +1,44 @@
+type User @table {
+  displayName: String!
+  email: String!
+  nativeLanguage: String!
+  photoUrl: String
+}
+
+type Language @table {
+  name: String!
+  code: String!
+  description: String
+}
+
+type UserLanguage @table(key: ["user", "language"]) {
+  user: User!
+  language: Language!
+  progressGrammar: Float!
+  progressVocabulary: Float!
+  progressScenarios: Float!
+}
+
+type Lesson @table {
+  language: Language!
+  title: String!
+  type: String!
+  order: Int!
+  content: String
+}
+
+type Scenario @table {
+  language: Language!
+  title: String!
+  description: String!
+  difficulty: String
+  context: String
+}
+
+type ScenarioInteraction @table {
+  scenario: Scenario!
+  prompt: String!
+  expectedResponses: [String]
+  order: Int!
+  feedbackMessage: String
+}

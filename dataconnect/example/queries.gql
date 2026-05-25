@@ -1,0 +1,64 @@
+query GetAllLessonsForLanguage($languageId: UUID!) @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public as it only retrieves lesson information.") {
+  lessons(where: {languageId: {eq: $languageId}}) {
+    id
+    title
+    type
+    order
+    content
+  }
+}
+
+mutation EnrollUserInLanguage($languageId: UUID!) @auth(level: USER, insecureReason: "This operation associates a language with the current logged-in user and initializes progress.") {
+  userLanguage_insert(data: {
+    userId_expr: "auth.uid",
+    languageId: $languageId,
+    progressGrammar: 0.0,
+    progressVocabulary: 0.0,
+    progressScenarios: 0.0
+  }) {
+    userId
+    languageId
+  }
+}
+
+query GetUserProgressForLanguage($languageId: UUID!) @auth(level: USER, insecureReason: "This operation retrieves the current logged-in user's progress for a specific language.") {
+  userLanguages(where: {
+    _and: [
+      {userId: {eq_expr: "auth.uid"}},
+      {languageId: {eq: $languageId}}
+    ]
+  }) {
+    user {
+      displayName
+      email
+    }
+    language {
+      name
+      code
+    }
+    progressGrammar
+    progressVocabulary
+    progressScenarios
+  }
+}
+
+query GetScenarioWithInteractions($scenarioId: UUID!) @auth(level: PUBLIC, insecureReason: "This operation retrieves a specific scenario and its interactions, safe for public access as it's read-only.") {
+  scenario(id: $scenarioId) {
+    id
+    title
+    description
+    difficulty
+    context
+    language {
+      name
+      code
+    }
+    scenarioInteractions_on_scenario(orderBy: [{order: ASC}]) {
+      id
+      order
+      prompt
+      expectedResponses
+      feedbackMessage
+    }
+  }
+}

@@ -1,0 +1,89 @@
+mutation CreateDemoData @transaction @auth(level: USER, insecureReason: "Seed data mutation for development purposes.") {
+  user_insertMany(data: [
+    {
+      id: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      displayName: "Alice Smith",
+      email: "alice@example.com",
+      nativeLanguage: "English",
+      photoUrl: "https://example.com/alice.jpg"
+    },
+    {
+      id: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      displayName: "Bob Johnson",
+      email: "bob@example.com",
+      nativeLanguage: "French",
+      photoUrl: "https://example.com/bob.jpg"
+    }
+  ])
+  language_insertMany(data: [
+    {
+      id: "c3d4e5f6-a7b8-9012-3456-7890abcdef01",
+      name: "French",
+      code: "fr",
+      description: "The official language of France."
+    },
+    {
+      id: "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+      name: "English",
+      code: "en",
+      description: "A West Germanic language, widely spoken internationally."
+    }
+  ])
+  userLanguage_insertMany(data: [
+    {
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      languageId: "c3d4e5f6-a7b8-9012-3456-7890abcdef01",
+      progressGrammar: 0.75,
+      progressVocabulary: 0.80,
+      progressScenarios: 0.60
+    },
+    {
+      userId: "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+      languageId: "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+      progressGrammar: 0.95,
+      progressVocabulary: 0.98,
+      progressScenarios: 0.90
+    },
+    {
+      userId: "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+      languageId: "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+      progressGrammar: 0.50,
+      progressVocabulary: 0.65,
+      progressScenarios: 0.40
+    }
+  ])
+  scenario_insertMany(data: [
+    {
+      id: "e5f6a7b8-c9d0-1234-5678-90abcdef0123",
+      languageId: "c3d4e5f6-a7b8-9012-3456-7890abcdef01",
+      title: "Ordering Coffee",
+      description: "Practice ordering coffee in a French cafe.",
+      difficulty: "Beginner",
+      context: "Cafe setting"
+    },
+    {
+      id: "f6a7b8c9-d0e1-2345-6789-0abcdef01234",
+      languageId: "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+      title: "Airport Check-in",
+      description: "Simulate checking in for a flight at an English-speaking airport.",
+      difficulty: "Intermediate",
+      context: "Airport terminal"
+    }
+  ])
+  scenarioInteraction_insertMany(data: [
+    {
+      scenarioId: "e5f6a7b8-c9d0-1234-5678-90abcdef0123",
+      prompt: "Bonjour! Que voulez-vous?",
+      expectedResponses: ["Je voudrais un café, s'il vous plaît."],
+      order: 1,
+      feedbackMessage: "Great start!"
+    },
+    {
+      scenarioId: "f6a7b8c9-d0e1-2345-6789-0abcdef01234",
+      prompt: "Good morning! May I see your passport and ticket?",
+      expectedResponses: ["Here you go.", "Certainly."],
+      order: 1,
+      feedbackMessage: "Polite and efficient."
+    }
+  ])
+}
